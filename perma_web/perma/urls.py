@@ -12,22 +12,23 @@ urlpatterns = patterns('perma.views',
     url(r'^$', 'common.landing', name='landing'),
     url(r'^tools/?$', 'common.tools', name='tools'),
     url(r'^about/?$', 'common.about', name='about'),
+    url(r'^dev/?$', 'common.dev', name='dev'),
     url(r'^faq/?$', 'common.faq', name='faq'),
     url(r'^contact/?$', 'common.contact', name='contact'),
     url(r'^terms-of-service/?$', 'common.terms_of_service', name='terms_of_service'),
     url(r'^privacy-policy/?$', 'common.privacy_policy', name='privacy_policy'),
-    
+
     #API routes
     url(r'^api/linky/upload?$', 'api.upload_file', name='api_linky_upload'),
     url(r'^api/linky/?$', 'api.linky_post', name='api_linky_post'),
     url(r'^api/linky/urldump/?$', 'api.urldump', name='urldump'),
     url(r'^api/linky/urldump/(?P<since>\d{4}-\d{2}-\d{2})/?', 'api.urldump', name='urldump_with_since'),
-    
+
     #Services
     url(r'^service/email-confirm/?$', 'service.email_confirm', name='service_email_confirm'),
     url(r'^service/receive-feedback/?$', 'service.receive_feedback', name='service_receive_feedback'),
     url(r'^service/link/status/(?P<guid>[a-zA-Z0-9]+)/?$', 'service.link_status', name='service_link_status'),
-    
+
     # Session/account management
     url(r'^password/change/$', auth_views.password_change, {'template_name': 'registration/password_change_form.html'}, name='auth_password_change'),
     #url(r'^login/?$', auth_views.login, {'template_name': 'registration/login.html'}, name='auth_login'),
@@ -43,7 +44,7 @@ urlpatterns = patterns('perma.views',
     url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/?$', auth_views.password_reset_confirm, {'template_name': 'registration/password_reset_confirm.html'}, name='auth_password_reset_confirm'),
     url(r'^password/reset/complete/?$', auth_views.password_reset_complete, {'template_name': 'registration/password_reset_complete.html'}, name='auth_password_reset_complete'),
     url(r'^password/reset/done/?$', auth_views.password_reset_done, {'template_name': 'registration/password_reset_done.html'}, name='auth_password_reset_done'),
-    
+
     # Manage/Linky Admin routes
     url(r'^manage/?$', 'user_management.create_link', name='user_management_create_link'),
     url(r'^manage/create/?$', 'user_management.create_link', name='user_management_create_link'),
@@ -70,10 +71,10 @@ urlpatterns = patterns('perma.views',
 #    url(r'^manage/users/?$', 'manage.users', name='manage_users'),
 #    url(r'^manage/account/?$', 'manage.account', name='manage_account'),
 #    url(r'^manage/activity/?$', 'manage.activity', name='manage_activity'),
-    
+
     # Our Perma ID catchall
-    url(r'^(?P<linky_guid>[a-zA-Z0-9]+)/?$', 'common.single_linky', name='single_linky'),    
-    
+    url(r'^(?P<linky_guid>[a-zA-Z0-9]+)/?$', 'common.single_linky', name='single_linky'),
+
 )
 
 urlpatterns += staticfiles_urlpatterns()

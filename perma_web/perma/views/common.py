@@ -43,10 +43,18 @@ def about(request):
     The about page
     """
 
-    context = {'host': request.get_host(), 'user': request.user,}
+    context = {'host': request.get_host(), 'user': request.user}
 
     return render_to_response('about.html', context_instance=RequestContext(context))
 
+def dev(request):
+    """
+    The dev page
+    """
+
+    context = {'user': request.user,}
+
+    return render_to_response('dev.html', context_instance=RequestContext(request, context))
 
 def faq(request):
     """
@@ -54,7 +62,7 @@ def faq(request):
     """
 
     context = {'user': request.user,}
-        
+
     return render_to_response('faq.html', context_instance=RequestContext(context))
 
 
@@ -64,7 +72,7 @@ def contact(request):
     """
 
     context = {'user': request.user,}
-    
+
     return render_to_response('contact.html', context_instance=RequestContext(context))
 
 
@@ -74,7 +82,7 @@ def terms_of_service(request):
     """
 
     context = {'user': request.user,}
-    
+
     return render_to_response('terms_of_service.html', context_instance=RequestContext(context))
 
 
@@ -82,9 +90,9 @@ def privacy_policy(request):
     """
     The privacy policy page
     """
-    
+
     context = {'user': request.user,}
-    
+
     return render_to_response('privacy_policy.html', context_instance=RequestContext(context))
 
 
@@ -92,7 +100,7 @@ def tools(request):
     """
     The tools page
     """
-    
+
     return render_to_response('tools.html', {})
 
 
@@ -115,7 +123,7 @@ def single_linky(request, linky_guid):
         # Increment the view count if not we're not hte refer
         parsed_url = urlparse(request.META.get('HTTP_REFERER', ''))
         current_site = Site.objects.get_current()
-        
+
         if not current_site.domain in parsed_url.netloc:
             link.view_count += 1
             link.save()
@@ -130,7 +138,7 @@ def single_linky(request, linky_guid):
 
         if 'type' in request.REQUEST:
             requested_type = request.REQUEST['type']
-        
+
             if requested_type == 'image':
                 serve_type = 'image'
             elif requested_type == 'pdf':
@@ -139,15 +147,15 @@ def single_linky(request, linky_guid):
                 serve_type = 'source'
             elif requested_type == 'text':
                 serve_type = 'text'
-                            
+
                 if asset.text_capture and asset.text_capture != 'pending':
                     path_elements = [settings.GENERATED_ASSETS_STORAGE, asset.base_storage_path, asset.text_capture]
                     file_path = os.path.sep.join(path_elements)
-                
+
                     with open(file_path, 'r') as f:
                         text_capture = f.read()
                     f.closed
-            
+
         # If we are going to serve up the live version of the site, let's make sure it's iframe-able
         display_iframe = False
         if serve_type == 'live':
@@ -179,5 +187,5 @@ def rate_limit(request, exception):
     """
     When a user hits a rate limit, send them here.
     """
-    
+
     return render_to_response("rate_limit.html")

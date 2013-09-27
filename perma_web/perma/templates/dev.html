@@ -1,0 +1,36 @@
+{% extends "layout-responsive.html" %}
+{% block title %} | Dev{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h2>Perma Dev</h2>
+
+<div class="row">
+	<div class="col-sm-12 column">
+      <h4>Create</h4>
+      <p>POST to http://perma.cc/api/v1/link/</p>
+      <p>Creates new Perma, returns identifier.</p>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Read</h4>
+      <p>GET to http://perma.cc/api/v1/link/<globaly unique identifier></p>
+      <p>Returns metadata and URLs to archives. Maybe this returns status of indexing jobs too.</p>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Vest</h4>
+      <p>POST (or PUT) to http://perma.cc/api/v1/link/<globaly unique identifier>/vest</p>
+      <p>Vests an existing Perma link. This will of course require some sort of auth.</p>
+    </div>
+    <div class="col-sm-12 column">
+      <h4>Update</h4>
+      <p>We probably don’t want this.</p>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Delete</h4>
+      <p>We probably don’t want this.</p>
+    </div>
+</div>
+{% endblock %}
