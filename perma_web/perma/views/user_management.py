@@ -33,7 +33,6 @@ from perma.forms import (
     UserFormEdit,
     RegistrarMemberFormEdit,
     VestingMemberFormEdit, 
-    VestingMemberWithVestingOrgFormEdit,
     VestingMemberWithGroupFormEdit, 
     UserAddRegistrarForm,
     UserAddVestingOrgForm,
@@ -461,7 +460,7 @@ def edit_user_in_group(request, user_id, group_name):
         if is_registry:
             form = VestingMemberWithGroupFormEdit(form_data, prefix="a", instance=target_user)
         elif is_registrar:
-            form = VestingMemberWithVestingOrgFormEdit(form_data, prefix="a", instance=target_user,
+            form = VestingMemberWithGroupFormEdit(form_data, prefix="a", instance=target_user,
                                                           registrar_id=request.user.registrar_id)
         else:
             form = VestingMemberFormEdit(form_data, prefix="a", instance=target_user)
@@ -623,6 +622,11 @@ def manage_account(request):
             context.update({'sponsoring_library_name': request.user.registrar.name, 'sponsoring_library_email': request.user.registrar.email, 'sponsoring_library_website': request.user.registrar.website})
         else:
             context.update({'no_registrar': True})
+        
+        if request.user.vesting_org:
+            context.update({'vesting_org_name': request.user.vesting_org.name})
+        else:
+            context.update({'no_vesting_org': True})
     
     if request.method == 'POST':
 

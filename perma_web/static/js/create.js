@@ -13,7 +13,8 @@ var check_status = function() {
 	var request = $.ajax({
 		url: status_url + newLinky.linky_id,
 		type: "GET",
-		dataType: "json"
+		dataType: "json",
+		cache: false
 	});
 
 	request.done(function(data) {	
@@ -21,7 +22,7 @@ var check_status = function() {
 		if (data.image_capture !== 'pending') {
 	        $('#spinner').slideUp();
 	        $('.thumbnail-placeholder').append('<div class="library-thumbnail"><img src="' + 
-	            newLinky.static_prefix + data.path + '/' + data.image_capture + '"></div>');
+	            MEDIA_URL + data.path + '/' + data.image_capture + '"></div>');
 			clearInterval(refreshIntervalId);
 		}	
 	});
