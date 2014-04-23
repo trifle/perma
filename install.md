@@ -19,7 +19,6 @@ Then check out the code:
 
     $ git clone https://github.com/harvard-lil/perma.git
     $ cd perma
-    $ git submodule init && git submodule update
 
 Start up the vagrant virtual machine in the background:
 
@@ -40,14 +39,14 @@ you are logged in as the user `vagrant`, you are using the `perma_0.1` VM, and y
 `/vagrant` is a shared folder in the guest machine that maps to the `perma` repo you just checked out on your host machine,
 so any changes you make on your local computer will appear inside `/vagrant` and vice versa.
 
-Now you're in the Django project folder and can develop like normal. First let's initialize the database
-(this will call `syncdb`, apply South migrations, and load fixtures):
-
-    (perma)vagrant@perma_0.1:/vagrant/perma_web$ fab init_dev_db
-
-Update the Python packages (you'll have to do this every time requirements.txt changes):
+Now you're in the Django project folder and can develop like normal. First let's install the Python
+pacakges we depend on (you'll have to do this every time requirements.txt changes):
 
     (perma)vagrant@perma_0.1:/vagrant/perma_web$ pip install -r requirements.txt
+
+Initialize the database (this will call `syncdb`, apply South migrations, and load fixtures):
+
+    (perma)vagrant@perma_0.1:/vagrant/perma_web$ fab init_dev_db
 
 Then you can run the test server:
 
@@ -71,10 +70,6 @@ To develop Perma, install Python and the Python package manager, `pip`.
 The required modules are found in `requirements.txt. Install them using `pip`:
 
     $ pip install -r requirements.txt
-
-Some packages are installed via `git` submodules instead of `pip`:
-
-    $ git submodule init && git submodule update
 
 If you're running OS X Mountain Lion, you may need to add the MySQL binaries 
 to your PATH:

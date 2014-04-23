@@ -11,7 +11,7 @@
 	{% endif %}
 
     {# put in styles because this has to be available during page load #}
-    <script src="{{ STATIC_URL }}js/local-datetime.js"></script>
+    <script src="{{ STATIC_URL }}js/moment-with-langs.min.js "></script>
 {% endblock %}
 
 {% block header %}
@@ -26,7 +26,7 @@
 						<a class="submitted_url" href="{{linky.submitted_url}}">{{linky.submitted_title}}</a><br/>
 						
 						<!--<a class="submitted_url" href="{{linky.submitted_url}}">{{linky.submitted_url}}</a>-->
-						<span class="light-grey">created {{linky.creation_timestamp|local_datetime}} | {{ linky.view_count }} view{% if linky.view_count > 1 %}s{% endif %}</span>
+						<span class="light-grey">created {{ linky.creation_timestamp|local_datetime }} | {{ linky.view_count }} view{% if linky.view_count > 1 %}s{% endif %}</span>
 						{% comment %}
 						{% diff asset linky %} <!-- has the instapaper cap changed recently? -->
 						{% endcomment %}

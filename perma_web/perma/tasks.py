@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import threading
 import urllib
 import glob
@@ -7,6 +8,10 @@ import shutil
 import urlparse
 from celery.contrib import rdb
 from django.core.files.storage import default_storage
+from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context
+from django.forms.models import model_to_dict
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -28,6 +33,7 @@ from socket import error as socket_error
 from django.conf import settings
 
 from perma.models import Asset, Stat, Registrar, LinkUser, Link, VestingOrg
+from perma.utils import store_file, store_data_to_file
 
 
 logger = logging.getLogger(__name__)
@@ -64,8 +70,7 @@ def create_storage_dir(storage_path):
 def save_screenshot(driver, image_path):
     """ Given selenium webdriver and path, save screenshot using Django's default_storage. """
     png_data = driver.get_screenshot_as_png()
-    with default_storage.open(image_path, 'wb') as image_file:
-        image_file.write(png_data)
+    return store_data_to_file(png_data, image_path, overwrite=True)
 
 def get_browser(user_agent, proxy_address, cert_path):
     """ Set up a Selenium browser with given user agent, proxy and SSL cert. """
@@ -99,14 +104,14 @@ def proxy_capture(self, link_guid, target_url, base_storage_path ,user_agent='')
     # basic setup
     asset_query = get_asset_query(link_guid)
     link_query = get_link_query(link_guid)
-    storage_path = get_storage_path(base_storage_path)
-    create_storage_dir(storage_path)
+    temp_storage_path = tempfile.mkdtemp()
     image_name = 'cap.png'
     warc_name = 'archive.warc.gz'
-    image_path = os.path.join(storage_path, image_name)
-    cert_path = os.path.join(storage_path, 'cert.pem')
+    image_path = os.path.join(base_storage_path, image_name)
+    warc_path = os.path.join(base_storage_path, warc_name)
+    cert_path = os.path.join(temp_storage_path, 'cert.pem')
 
-    print "%s: Fetching %s, saving to %s" % (link_guid, target_url, storage_path)
+    print "%s: Fetching %s, saving to %s" % (link_guid, target_url, temp_storage_path)
 
     # create a request handler class that counts unique requests and responses
     #global unique_requests, unique_responses
@@ -129,7 +134,7 @@ def proxy_capture(self, link_guid, target_url, base_storage_path ,user_agent='')
         try:
             proxy = warcprox.WarcProxy(
                 server_address=("127.0.0.1", warcprox_port),
-                ca=warcprox.CertificateAuthority(cert_path, storage_path),
+                ca=warcprox.CertificateAuthority(cert_path, temp_storage_path),
                 recorded_url_q=recorded_url_queue,
                 req_handler_class=CountingRequestHandler
             )
@@ -143,7 +148,7 @@ def proxy_capture(self, link_guid, target_url, base_storage_path ,user_agent='')
     proxy_address = "127.0.0.1:%s" % warcprox_port
 
     # start warcprox in the background
-    warc_writer = warcprox.WarcWriterThread(recorded_url_q=recorded_url_queue, directory=storage_path, gzip=True, port=warcprox_port)
+    warc_writer = warcprox.WarcWriterThread(recorded_url_q=recorded_url_queue, directory=temp_storage_path, gzip=True, port=warcprox_port)
     warcprox_controller = warcprox.WarcproxController(proxy, warc_writer)
     warcprox_thread = threading.Thread(target=warcprox_controller.run_until_shutdown, name="warcprox", args=())
     warcprox_thread.start()
@@ -248,13 +253,13 @@ def proxy_capture(self, link_guid, target_url, base_storage_path ,user_agent='')
 
     print "Saving WARC."
     # save generated warc file
-    temp_warc_path = os.path.join(storage_path, warc_writer._f_finalname)
-    final_warc_path = os.path.join(storage_path, warc_name)
+    temp_warc_path = os.path.join(temp_storage_path, warc_writer._f_finalname)
     try:
-        os.rename(temp_warc_path, final_warc_path)
-        if settings.USE_WARC_ARCHIVE:
-            asset_query.update(warc_capture=warc_name)
-    except OSError as e:
+        with open(temp_warc_path, 'rb') as warc_file:
+            warc_name = store_file(warc_file, warc_path)
+            if settings.USE_WARC_ARCHIVE:
+                asset_query.update(warc_capture=warc_name)
+    except Exception as e:
         logger.info("Web Archive File creation failed for %s: %s" % (target_url, e))
         if settings.USE_WARC_ARCHIVE:
             asset_query.update(warc_capture='failed')
@@ -352,42 +357,37 @@ def get_pdf(link_guid, target_url, base_storage_path, user_agent):
     """
     Download a PDF from the network
 
-    This function is usually executed via a synchronous Celery call
+    This function is executed via an asynchronous Celery call
     """
     # basic setup
     asset_query = get_asset_query(link_guid)
-    storage_path = get_storage_path(base_storage_path)
-    create_storage_dir(storage_path)
-
     pdf_name = 'cap.pdf'
-    pdf_path = os.path.join(storage_path, pdf_name)
+    pdf_path = os.path.join(base_storage_path, pdf_name)
 
     # Get the PDF from the network
-    r = requests.get(target_url, stream = True, verify=False,
+    pdf_request = requests.get(target_url, stream = True, verify=False,
         headers={'User-Agent': user_agent})
 
+    # write PDF out to a temp file
+    temp = tempfile.TemporaryFile()
     try:
-        with open(pdf_path, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-            
-                # Limit our filesize
-                if f.tell() > settings.MAX_ARCHIVE_FILE_SIZE:
-                    raise
-                
-                if chunk: # filter out keep-alive new chunks
-                    f.write(chunk)
-                    f.flush()
-                    
+        for chunk in pdf_request.iter_content(chunk_size=1024):
+
+            # Limit our filesize
+            if temp.file.tell() > settings.MAX_ARCHIVE_FILE_SIZE:
+                raise
+
+            if chunk: # filter out keep-alive new chunks
+                temp.file.write(chunk)
+                temp.file.flush()
     except Exception, e:
         logger.info("PDF capture too big, %s" % target_url)
-        os.remove(pdf_path)
-
-    if os.path.exists(pdf_path):
-        # TODO: run some sort of validation check on the PDF
-        asset_query.update(pdf_capture=pdf_name)
-    else:
-        logger.info("PDF capture failed for %s" % target_url)
         asset_query.update(pdf_capture='failed')
+
+    # store temp file
+    temp.file.seek(0)
+    pdf_name = store_file(temp.file, pdf_path)
+    asset_query.update(pdf_capture=pdf_name)
 
 
 def instapaper_capture(url, title):
@@ -518,3 +518,80 @@ def get_nigthly_stats():
         )
 
     stat.save()
+
+@celery.task
+def email_weekly_stats():
+    """
+    We bundle up our stats weekly and email them to a developer and then
+    onto our interested mailing lists
+    """
+
+    previous_stats_query_set = Stat.objects.order_by('-creation_timestamp')[:8][7]
+    current_stats_query_set = Stat.objects.filter().latest('creation_timestamp')
+
+    format = '%b %d, %Y, %H:%M %p'
+
+    context = {
+        'start_time': previous_stats_query_set.creation_timestamp.strftime(format),
+        'end_time': current_stats_query_set.creation_timestamp.strftime(format),
+    }
+
+    # Convert querysets to dicts so that we can access them easily in our print_stats_line util
+    previous_stats = model_to_dict(previous_stats_query_set)
+    current_stats = model_to_dict(current_stats_query_set)
+
+    context.update({
+        'num_regular_users_added': current_stats['regular_user_count'] - previous_stats['regular_user_count'],
+        'prev_regular_users_count': previous_stats['regular_user_count'],
+        'current_regular_users_count': current_stats['regular_user_count'],
+
+        'num_vesting_members_added': current_stats['vesting_member_count'] - previous_stats['vesting_member_count'],
+        'prev_vesting_members_count': previous_stats['vesting_member_count'],
+        'current_vesting_members_count': current_stats['vesting_member_count'],
+
+        'num_registar_members_added': current_stats['registrar_member_count'] - previous_stats['registrar_member_count'],
+        'prev_registrar_members_count': previous_stats['registrar_member_count'],
+        'current_registrar_members_count': current_stats['registrar_member_count'],
+
+        'num_registry_members_added': current_stats['registry_member_count'] - previous_stats['registry_member_count'],
+        'prev_registry_members_count': previous_stats['registry_member_count'],
+        'current_registry_members_count': current_stats['registry_member_count'],
+
+        'num_vesting_orgs_added': current_stats['vesting_org_count'] - previous_stats['vesting_org_count'],
+        'prev_vesting_orgs_count': previous_stats['vesting_org_count'],
+        'current_vesting_orgs_count': current_stats['vesting_org_count'],
+
+        'num_registrars_added': current_stats['registrar_count'] - previous_stats['registrar_count'],
+        'prev_registrars_count': previous_stats['registrar_count'],
+        'current_registrars_count': current_stats['registrar_count'],
+
+        'num_unvested_links_added': current_stats['unvested_count'] - previous_stats['unvested_count'],
+        'prev_unvested_links_count': previous_stats['unvested_count'],
+        'current_unvested_links_count': current_stats['unvested_count'],
+
+        'num_vested_links_added': current_stats['vested_count'] - previous_stats['vested_count'],
+        'prev_vested_links_count': previous_stats['vested_count'],
+        'current_vested_links_count': current_stats['vested_count'],
+
+        'num_darchive_takedown_added': current_stats['darchive_takedown_count'] - previous_stats['darchive_takedown_count'],
+        'prev_darchive_takedown_count': previous_stats['darchive_takedown_count'],
+        'current_darchive_takedown_count': current_stats['darchive_takedown_count'],
+
+        'num_darchive_robots_added': current_stats['darchive_robots_count'] - previous_stats['darchive_robots_count'],
+        'prev_darchive_robots_count': previous_stats['darchive_robots_count'],
+        'current_darchive_robots_count': current_stats['darchive_robots_count'],
+
+        'disk_added': float(current_stats['disk_usage'] - previous_stats['disk_usage'])/1024/1024/1024,
+        'prev_disk': float(previous_stats['disk_usage'])/1024/1024/1024,
+        'current_disk': float(current_stats['disk_usage'])/1024/1024/1024,
+    })
+
+    send_mail(
+        'This week in Perma.cc -- the numbers',
+        get_template('email/stats.html').render(
+            Context(context)
+        ),
+        settings.DEFAULT_FROM_EMAIL,
+        [settings.DEVELOPER_EMAIL],
+        fail_silently = False
+    )
