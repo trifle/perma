@@ -283,15 +283,16 @@ class Asset(models.Model):
             self.base_storage_path = self.link.generate_storage_path()
 
     def base_url(self, extra=u""):
-        return self.base_storage_path+"/"+extra
+        return "%s/%s" % (self.base_storage_path, extra)
 
     def image_url(self):
         return self.base_url(self.image_capture)
 
     def warc_url(self):
         if self.warc_capture and '.warc' in self.warc_capture:
-            return u"%s/%s" % (self.link.guid, self.link.submitted_url)
-        return self.base_url(self.warc_capture)
+            return u"/warc/%s/%s" % (self.link.guid, self.link.submitted_url)
+        else:
+            return settings.MEDIA_URL+self.base_url(self.warc_capture)
 
     def warc_download_url(self):
         if settings.USE_WARC_ARCHIVE:

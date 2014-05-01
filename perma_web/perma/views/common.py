@@ -1,8 +1,9 @@
 from django.core import serializers
 from django.core.files.storage import default_storage
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, Http404, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, Http404, HttpResponse, HttpResponseNotFound, HttpResponseServerError
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -196,7 +197,7 @@ def single_linky(request, guid):
 
         context = {'linky': link, 'asset': asset, 'pretty_date': pretty_date, 'next': request.get_full_path(),
                    'display_iframe': display_iframe, 'serve_type': serve_type, 'text_capture': text_capture,
-                   'warc_url':'/warc/'}
+                   'warc_url':asset.warc_url()}
 
     if request.META.get('CONTENT_TYPE') == 'application/json':
         # if we were called as JSON (by a mirror), serialize and send back as JSON
@@ -220,3 +221,11 @@ def rate_limit(request, exception):
     """
     
     return render_to_response("rate_limit.html")
+
+## We need custom views for server errors because otherwise Django
+## doesn't send a RequestContext (meaning we don't get STATIC_ROOT).
+def server_error_404(request):
+    return HttpResponseNotFound(render_to_string('404.html', context_instance=RequestContext(request)))
+
+def server_error_500(request):
+    return HttpResponseServerError(render_to_string('500.html', context_instance=RequestContext(request)))
