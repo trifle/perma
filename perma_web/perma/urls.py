@@ -13,6 +13,7 @@ guid_pattern = r'(?P<guid>[a-zA-Z0-9\-]+)'
 urlpatterns = patterns('perma.views',
 
     # Common Pages
+<<<<<<< HEAD
     url(r'^$', DirectTemplateView.as_view(template_name='landing.html', extra_context={'this_page':'landing'}), name='landing'),
     url(r'^tools/?$', DirectTemplateView.as_view(template_name='tools.html'), name='tools'),
     url(r'^about/?$', DirectTemplateView.as_view(template_name='about.html'), name='about'),
@@ -39,14 +40,25 @@ urlpatterns = patterns('perma.views',
     url(r'^docs/robustness/?$', DirectTemplateView.as_view(template_name='docs/robustness.html'), name='docs_robustness'),
     url(r'^docs/perma_user_roles/?$', DirectTemplateView.as_view(template_name='docs/perma-user-roles.html'), name='docs_perma_user_roles'),
     url(r'^docs/faq/?$', DirectTemplateView.as_view(template_name='docs/faq.html'), name='docs_faq'),
+=======
+    url(r'^$', 'common.landing', name='landing'),
+    url(r'^tools/?$', 'common.tools', name='tools'),
+    url(r'^about/?$', 'common.about', name='about'),
+    url(r'^dev/?$', 'common.dev', name='dev'),
+    url(r'^faq/?$', 'common.faq', name='faq'),
+    url(r'^contact/?$', 'common.contact', name='contact'),
+    url(r'^terms-of-service/?$', 'common.terms_of_service', name='terms_of_service'),
+    url(r'^privacy-policy/?$', 'common.privacy_policy', name='privacy_policy'),
+>>>>>>> FETCH_HEAD
 
     #API routes
     url(r'^api/linky/urldump/?$', 'api.urldump', name='urldump'),
     url(r'^api/linky/urldump/(?P<since>\d{4}-\d{2}-\d{2})/?', 'api.urldump', name='urldump_with_since'),
-    
+
     #Services
     url(r'^service/email-confirm/?$', 'service.email_confirm', name='service_email_confirm'),
     url(r'^service/receive-feedback/?$', 'service.receive_feedback', name='service_receive_feedback'),
+<<<<<<< HEAD
     url(r'^service/link/status/%s?/?$' % guid_pattern, 'service.link_status', name='service_link_status'),
     url(r'^service/stats/users/?$', 'service.stats_users', name='service_stats_users'),
     url(r'^service/stats/links/?$', 'service.stats_links', name='service_stats_links'),
@@ -56,6 +68,10 @@ urlpatterns = patterns('perma.views',
     url(r'^service/stats/registrar/?$', 'service.stats_registrar', name='service_stats_registrar'),
     url(r'^service/bookmarklet-create/$', 'service.bookmarklet_create', name='service.bookmarklet_create'),
     
+=======
+    url(r'^service/link/status/(?P<guid>[a-zA-Z0-9]+)/?$', 'service.link_status', name='service_link_status'),
+
+>>>>>>> FETCH_HEAD
     # Session/account management
     url(r'^login/?$', 'user_management.limited_login', {'template_name': 'registration/login.html'}, name='user_management_limited_login'),
     url(r'^login/not-active/?$', 'user_management.not_active', name='user_management_not_active'),
@@ -65,6 +81,7 @@ urlpatterns = patterns('perma.views',
     #url(r'^register/confirm/(?P<code>\w+)/$', 'user_management.register_email_code_confirmation', name='confirm_register'),
     url(r'^register/password/(?P<code>\w+)/$', 'user_management.register_email_code_password', name='register_password'),
     url(r'^register/email/?$', 'user_management.register_email_instructions', name='register_email_instructions'),
+<<<<<<< HEAD
     url(r'^password/change/?$', auth_views.password_change, {'template_name': 'registration/password_change_form.html'}, name='password_change'),
     url(r'^password/change/done/?$', auth_views.password_change_done, {'template_name': 'registration/password_change_done.html'},   name='password_change_done'),
     url(r'^password/reset/?$', auth_views.password_reset, {'template_name': 'registration/password_reset_form.html'}, name='password_reset'),
@@ -84,6 +101,18 @@ urlpatterns = patterns('perma.views',
     url(r'^manage/vested-links(?P<path>/.*)?$', 'link_management.vested_links', name='vested_links'),
 
     # user management
+=======
+    url(r'^password/change/?$', auth_views.password_change, {'template_name': 'registration/password_change_form.html'}, name='auth_password_change'),
+    url(r'^password/change/done/?$', auth_views.password_change_done, {'template_name': 'registration/password_change_done.html'},   name='auth_password_change_done'),
+    url(r'^password/reset/?$', auth_views.password_reset, {'template_name': 'registration/password_reset_form.html'}, name='auth_password_reset'),
+    url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/?$', auth_views.password_reset_confirm, {'template_name': 'registration/password_reset_confirm.html'}, name='auth_password_reset_confirm'),
+    url(r'^password/reset/complete/?$', auth_views.password_reset_complete, {'template_name': 'registration/password_reset_complete.html'}, name='auth_password_reset_complete'),
+    url(r'^password/reset/done/?$', auth_views.password_reset_done, {'template_name': 'registration/password_reset_done.html'}, name='auth_password_reset_done'),
+
+    # Manage/Linky Admin routes
+    url(r'^manage/?$', 'user_management.create_link', name='user_management_create_link'),
+    url(r'^manage/create/?$', 'user_management.create_link', name='user_management_create_link'),
+>>>>>>> FETCH_HEAD
     url(r'^manage/registrars/?$', 'user_management.manage_registrar', name='user_management_manage_registrar'),
     url(r'^manage/registrars/(?P<registrar_id>[a-zA-Z0-9]+)/?$', 'user_management.manage_single_registrar', name='user_management_manage_single_registrar'),
     url(r'^manage/vesting-organizations/?$', 'user_management.manage_vesting_org', name='user_management_manage_vesting_org'),
@@ -112,11 +141,17 @@ urlpatterns = patterns('perma.views',
 #    url(r'^manage/account/?$', 'manage.account', name='manage_account'),
 #    url(r'^manage/activity/?$', 'manage.activity', name='manage_activity'),
 
+<<<<<<< HEAD
     url(r'^cdx$', 'common.cdx', name='cdx'),
 
     # Our Perma ID catchall
     url(r'^%s/?$' % r'(?P<guid>[^\./]+)', 'common.single_linky', name='single_linky'),
     
+=======
+    # Our Perma ID catchall
+    url(r'^(?P<linky_guid>[a-zA-Z0-9]+)/?$', 'common.single_linky', name='single_linky'),
+
+>>>>>>> FETCH_HEAD
 )
 
 # debug-only serving of static and media assets

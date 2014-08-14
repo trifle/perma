@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Global */
 
 html {
@@ -2287,3 +2288,12 @@ ul.vesting li {
 
 }
 
+=======
+.codeblock {
+  white-space: pre;
+  font-family: monospace;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+}
+
+>>>>>>> FETCH_HEAD

@@ -1,0 +1,92 @@
+{% extends "layout-responsive.html" %}
+{% block title %} | Dev{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h2>Perma Dev</h2>
+
+<div class="row">
+	<div class="col-sm-12 column">
+      <h4>API Key</h4>
+      <p>All API calls require the <span class="codeblock">api_key</span> parameter. You can generate and retrieve you API kiy through the account management page.</p>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Format</h4>
+      <p>All calls default to json unless otherwise specifed. You can select your prefered output with the <span class="codeblock">format</span> parameter (can be json or xml).</p>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Create</h4>
+      <p>POST to <span class="codeblock">http://perma.cc/api/v1/link/</span></p>
+      <p>Creates new Perma, returns identifier.</p>
+      <h5>Parameters:</h5>
+      <p>url, title, (file)</p>
+      <h5>Example:</h5>
+      <span>
+        <div class="codeblock">curl -F "api_key=RHRMTOQSIF6F87Z11" -F "format=json" -F "title=Google" -F "url=example.com" "<a href="http://perma.cc/api/v1/link/" rel="nofollow">http://perma.cc/api/v1/link/</a>"</div></span>
+      <br>
+      <span>
+        <div class="codeblock">
+{
+  "status" : "success",
+  "response" : {
+    "perma_id": "08uLuvwM3Fh",
+    "perma_hash": "08uLuvwM3Fh"
+  }
+}
+        </div>
+      </span>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Read</h4>
+      <p>GET to <span class="codeblock">http://perma.cc/api/v1/link/<globaly unique identifier></span></p>
+      <p>Returns metadata and URLs to archives. Returns status of indexing jobs too.</p>
+      <h5>Parameters:</h5>
+      <p>perma_id</p>
+      <h5>Example:</h5>
+      <span>
+        <div class="codeblock">http://perma.cc/api/v1/link?api_key=RHRMTOQSIF6F87Z11&format=json&perma_id=08uLuvwM3Fh</div></span>
+      <br>
+      <span>
+        <div class="codeblock">
+{
+  "status" : "success",
+  "response" : {
+    "perma_id" : "08uLuvwM3Fh",
+    "title" : "Welcome to example.com!",
+    "url" : "http://example.com",
+    "body" : "<html>Hi!</html>",
+    "img_cap" : "http://perma.law.harvard.edu/static/2013/10/1/21/44/08RxzoS4tSw/cap.png"
+  }
+}
+        </div>
+      </span>
+    </div>
+	<div class="col-sm-12 column">
+      <h4>Vest</h4>
+      <p>POST to <span class="codeblock">http://perma.cc/api/v1/link/vest</span></p>
+      <p>Vests an existing Perma link. Your accout must have vesting privlidges to make this call.</p>
+      <h5>Parameters:</h5>
+      <p>perma_id</p>
+      <h5>Example:</h5>
+      <span>
+        <div class="codeblock">http://perma.cc/api/v1/link/vest?api_key=RHRMTOQSIF6F87Z11&format=json&perma_id=08uLuvwM3Fh</div>
+      </span>
+      <br>
+      <span>
+        <div class="c odeblock">
+{
+  "status" : "success",
+  "response" : {
+    "perma_id" : "08uLuvwM3Fh",
+    "title" : "Welcome to example.com!",
+    "url" : "http://example.com",
+  }
+}
+        </div>
+      </span>
+    </div>
+</div>
+{% endblock %}

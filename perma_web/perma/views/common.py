@@ -28,13 +28,38 @@ from ..models import Link, Asset
 from perma.forms import ContactForm
 
 
+<<<<<<< HEAD
 logger = logging.getLogger(__name__)
 valid_serve_types = ['live', 'image','pdf','source','text','warc','warc_download']
 
+=======
+    context = {'host': request.get_host(), 'user': request.user}
+
+    return render_to_response('about.html', context_instance=RequestContext(context))
+
+def dev(request):
+    """
+    The dev page
+    """
+
+    context = {'user': request.user,}
+
+    return render_to_response('dev.html', context_instance=RequestContext(request, context))
+
+def faq(request):
+    """
+    The FAQ page
+    """
+
+    context = {'user': request.user,}
+
+    return render_to_response('faq.html', context_instance=RequestContext(context))
+>>>>>>> FETCH_HEAD
 
 class DirectTemplateView(TemplateView):
     extra_context = None
 
+<<<<<<< HEAD
     def get_context_data(self, **kwargs):
         """ Override Django's TemplateView to allow passing in extra_context. """
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -45,6 +70,16 @@ class DirectTemplateView(TemplateView):
                 else:
                     context[key] = value
         return context
+=======
+def contact(request):
+    """
+    The contact page
+    """
+
+    context = {'user': request.user,}
+
+    return render_to_response('contact.html', context_instance=RequestContext(context))
+>>>>>>> FETCH_HEAD
 
     @method_decorator(must_be_mirrored)
     def dispatch(self, request, *args, **kwargs):
@@ -55,11 +90,28 @@ def stats(request):
     """
     The global stats
     """
+<<<<<<< HEAD
     
     # TODO: generate these nightly. we shouldn't be doing this for every request
     top_links_all_time = list(Link.objects.all().order_by('-view_count')[:10])
 
     context = RequestContext(request, {'top_links_all_time': top_links_all_time})
+=======
+
+    context = {'user': request.user,}
+
+    return render_to_response('terms_of_service.html', context_instance=RequestContext(context))
+
+
+def privacy_policy(request):
+    """
+    The privacy policy page
+    """
+
+    context = {'user': request.user,}
+
+    return render_to_response('privacy_policy.html', context_instance=RequestContext(context))
+>>>>>>> FETCH_HEAD
 
     return render_to_response('stats.html', context)
 
@@ -71,6 +123,7 @@ def cdx(request):
         It accepts a standard CDX request, except with a GUID instead of date, and returns a standard CDX 11 response.
         If there's no warc for the requested GUID, or the requested URL isn't stored in that WARC, it returns a 404.
     """
+<<<<<<< HEAD
     # find requested link and url
     try:
         link = Link.objects.select_related().get(pk=request.GET.get('guid'))
@@ -122,6 +175,16 @@ def cdx(request):
 @ratelimit(method='GET', rate=settings.DAY_LIMIT, block=True, ip=False,
            keys=lambda req: req.META.get('HTTP_X_FORWARDED_FOR', req.META['REMOTE_ADDR']))
 def single_linky(request, guid):
+=======
+
+    return render_to_response('tools.html', {})
+
+
+@ratelimit(method='GET', rate=settings.MINUTE_LIMIT, block='True')
+@ratelimit(method='GET', rate=settings.HOUR_LIMIT, block='True')
+@ratelimit(method='GET', rate=settings.DAY_LIMIT, block='True')
+def single_linky(request, linky_guid):
+>>>>>>> FETCH_HEAD
     """
     Given a Perma ID, serve it up. Vesting also takes place here.
     """
@@ -174,7 +237,7 @@ def single_linky(request, guid):
         # Increment the view count if we're not the referrer
         parsed_url = urlparse(request.META.get('HTTP_REFERER', ''))
         current_site = Site.objects.get_current()
-        
+
         if not current_site.domain in parsed_url.netloc:
             link.view_count += 1
             link.save()
@@ -182,11 +245,38 @@ def single_linky(request, guid):
         asset = Asset.objects.get(link=link)
 
         text_capture = None
+<<<<<<< HEAD
         if serve_type == 'text':
             if asset.text_capture and asset.text_capture != 'pending':
                 with default_storage.open(os.path.join(asset.base_storage_path, asset.text_capture), 'r') as f:
                     text_capture = f.read()
             
+=======
+
+        # User requested archive type
+        serve_type = 'live'
+
+        if 'type' in request.REQUEST:
+            requested_type = request.REQUEST['type']
+
+            if requested_type == 'image':
+                serve_type = 'image'
+            elif requested_type == 'pdf':
+                serve_type = 'pdf'
+            elif requested_type == 'source':
+                serve_type = 'source'
+            elif requested_type == 'text':
+                serve_type = 'text'
+
+                if asset.text_capture and asset.text_capture != 'pending':
+                    path_elements = [settings.GENERATED_ASSETS_STORAGE, asset.base_storage_path, asset.text_capture]
+                    file_path = os.path.sep.join(path_elements)
+
+                    with open(file_path, 'r') as f:
+                        text_capture = f.read()
+                    f.closed
+
+>>>>>>> FETCH_HEAD
         # If we are going to serve up the live version of the site, let's make sure it's iframe-able
         display_iframe = False
         if serve_type == 'live':
@@ -226,7 +316,7 @@ def rate_limit(request, exception):
     """
     When a user hits a rate limit, send them here.
     """
-    
+
     return render_to_response("rate_limit.html")
 
 ## We need custom views for server errors because otherwise Django
