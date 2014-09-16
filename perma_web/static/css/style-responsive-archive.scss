@@ -1,6 +1,10 @@
 /* Our Sass vars start */
 
+$primary-font: 'Roboto Slab', sans-serif;
 $secondary-font: 'Helvetica', 'sans-serif';
+
+$primary-color: #ff4100; /* orange */
+$secondary-color: #09f; /* cyan */
 
 /* Our Sass vars end */
 
@@ -27,6 +31,7 @@ body {
 
 .tab-border	{
     border-bottom: solid 5px #ff4100;
+    padding-bottom: 15px;
 }
 
 .container-fluid {
@@ -39,9 +44,9 @@ a {
 
 p {
     margin-bottom: 20px;
-    font-family: 'Roboto Slab', sans-serif;
+    font-family: $secondary-font;
     font-weight:300;
-    color: #000;
+    color: #555;
 }
 
 .logo span {
@@ -51,7 +56,7 @@ p {
 .logo a, .logo {
     min-width:235px;
     text-decoration: none;
-    font-family: 'Roboto Slab', sans-serif;
+    font-family: $primary-font;
     font-size:36px;
     color:#ff4100;
 }
@@ -92,11 +97,11 @@ header #compact-header .infinity-logo   {
 /* Full header start */
 
 header #full-header .controls {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .url-row {
-    padding: 10px 10px;
+    padding: 10px 20px;
     background-color: #fff;
     -moz-box-shadow:    2px 0px 4px 0px #c6ccd1;
     -webkit-box-shadow: 2px 0px 4px 0px #c6ccd1;
@@ -110,14 +115,19 @@ header #full-header p.helper-info  {
 
 header #full-header p.big-link  {
     word-wrap: break-word;
-    font-size: 28px;
+    font-size: 37px;
+    font-family: $primary-font;
+    display: inline;
+    background: #f0ffe5;
+
+    padding: 2px 5px;
 }
 
 header #full-header p.creation-details  {
     margin: 35px 0 0 0;
-    color: #444;
+    color: #999;
     font-family: $secondary-font;
-    font-size: 17px;
+    font-size: 15px;
 }
 
 header #full-header .spacer {
@@ -127,42 +137,14 @@ header #full-header .spacer {
 
 header #full-header p.archive-note {
     margin-top: 40px;
-    margin-bottom: 7px;
+    margin-bottom: 20px;
     color: #555;
     font-family: $secondary-font;
     font-size: 16px;
 }
 
-header #full-header .archive-container {
-    padding: 10px 15px;
-    background-color: #fff;
-    margin-bottom: 25px;
-    border-top: solid 5px #bbb;
-    -moz-box-shadow:    2px 2px 4px 0px #c6ccd1;
-    -webkit-box-shadow: 2px 2px 4px 0px #c6ccd1;
-    box-shadow:         0px 2px 4px 0px #c6ccd1;
-}
-
-header #full-header .archive-container p.archive-heading {
-    font-size: 25px;
-    margin-bottom: 3px;
-    color:#09f;
-    font-family: 'Roboto Slab', sans-serif;
-}
-
 header #full-header a {
     font-weight: 300;
-}
-
-header #full-header .selected-archive-container {
-    border-top: solid 5px #ff4100;
-}
-
-header #full-header .archive-container p {
-    margin-bottom: 3px;
-    color: #555;
-    font-size: 17px;
-    font-family: $secondary-font
 }
 
 .overlay {
@@ -251,18 +233,46 @@ img.watermark-image {
     margin: 4px 4px;
 }
 
-a.btn.vest, a.btn.dashboard, a.btn.user-delete {
-	width:100px;
-	padding:2px 0px;
-	color:#666;
-	font-size:14px;
-	border:1px solid #666;
-	border-radius: 3px;
-	background:#fff;
-	margin-left:10px;
+.archive-btn-container {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
 }
 
-input.btn.vest {
+.archive-btn-container a {
+    font-size: 20px;
+    letter-spacing: .8px;
+    color: #fff;
+    background-color: $secondary-color;
+    margin-bottom: 10px;
+    box-shadow: none;
+    border: 2px solid $secondary-color;
+}
+
+.archive-btn-container a:hover {
+    color: red;
+}
+
+.archive-btn-container p {
+    max-width: 600px;
+    font-size: 19px;
+}
+
+a.btn.archive {
+    padding: 4px;
+    border-radius: 3px;
+    margin-right: 15px;
+}
+
+a.btn.active {
+    background-color: #fff;
+    color: #666;
+    box-shadow: none;
+    border: 2px solid #999;
+}
+
+a.btn.vest, a.btn.dashboard, a.btn.user-delete, input.btn.vest {
 	width:100px;
 	padding:2px 0px;
 	color:#666;
@@ -271,6 +281,7 @@ input.btn.vest {
 	border-radius: 3px;
 	background:#fff;
 	margin-left:10px;
+	font-weight: 300;
 }
 
 input.btn.vest:hover, input.btn.vest:focus, a.btn.vest:hover, a.btn.vest:focus {
@@ -286,6 +297,10 @@ a.btn.user-delete {
 a.btn.user-delete:hover, a.btn.user-delete:focus {
 	border:1px solid #dd3800;
   	color:#dd3800;
+}
+
+.admin-buttons{
+    margin-bottom: 10px;
 }
 
 /* Buttons end */
