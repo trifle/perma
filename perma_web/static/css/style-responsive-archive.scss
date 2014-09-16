@@ -233,8 +233,9 @@ img.watermark-image {
 }
 
 .archive-btn-container {
-    padding: 5px 10px;
+    padding: 5px 20px 5px 10px;
     background-color: #f8f8f8;
+    /*border: solid 1px #dfdfdf;*/
 }
 
 .archive-btn-container a {
@@ -243,7 +244,6 @@ img.watermark-image {
     letter-spacing: .8px;
     color: #fff;
     background-color: $secondary-color;
-
     box-shadow: none;
     border: 3px solid $secondary-color;
 }
