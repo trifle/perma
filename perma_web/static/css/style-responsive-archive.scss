@@ -119,7 +119,7 @@ header #full-header p.big-link  {
     font-size: 37px;
     font-family: $primary-font;
     display: inline;
-    background: #FFF96B;
+    background: #fff849;
     padding: 0 5px;
 }
 
@@ -234,17 +234,17 @@ img.watermark-image {
 }
 
 .archive-btn-container {
+    border: 1px solid #ccc;
     padding: 0 0px 10px 7px;
-    /*border-top: solid 14px #ddd;*/
     margin-bottom: 20px;
     background-color: #f8f8f8;
 }
 
 .archive-btn-container .archive-type-title {
-    background-color: #aaa;
-    margin: 0 0 0 -7px;;
+    background-color: #888;
+    margin: 0 -1px 0 -8px;
     color: #fff;
-    padding: 1px 7px;
+    padding: 3px 7px;
     font-family: $primary-font;
     font-weight: 300;
     font-size: 21px;
@@ -312,7 +312,7 @@ a.btn.user-delete:hover, a.btn.user-delete:focus {
 }
 
 .admin-buttons {
-    margin: 10px 0;
+    margin: 0px 0 5px 0;
 }
 
 .admin-buttons .btn {
@@ -320,7 +320,6 @@ a.btn.user-delete:hover, a.btn.user-delete:focus {
     border: 1px solid #bbb;
     color: #444;
 }
-
 
 .admin-buttons .caret {
     border-top:4px solid #000;
