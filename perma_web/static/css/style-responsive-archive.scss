@@ -234,18 +234,17 @@ img.watermark-image {
 }
 
 .archive-btn-container {
-    border: 1px solid #ccc;
+    border: 1px solid #999;
     padding: 0 0px 12px 10px;
     margin-bottom: 20px;
 }
 
 .archive-btn-container .archive-type-title {
-    background-color: #999;
+    background-color: #555;
     margin: 0 -1px 0 -11px;
     color: #fff;
-    padding: 3px 7px;
-    font-family: $primary-font;
-    font-weight: 300;
+    padding: 3px 10px;
+    font-family: $secondary-font;
     font-size: 21px;
     margin-bottom: 10px;
 }
