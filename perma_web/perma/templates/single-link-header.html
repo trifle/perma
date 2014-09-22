@@ -31,37 +31,18 @@
 
                 <section class="url-row">
                     <div class="row">
-                        <div class="col-xs-8">
-                            <p style="color: #777; font-family: helvetica; margin-bottom:2px; font-size: 15px;">Below the orange bar is an archive of</p>
+                        <div class="col-xs-12">
+                            <p style="color: #777; font-family: helvetica; margin-bottom:2px; font-size: 15px;">Below is an archive of</p>
                         </div>
-
-                        <div class="col-xs-4">
-                            <!-- Split button -->
-                            <div class="btn-group pull-right admin-buttons">
-                              <button type="button" class="btn btn-warning btn-sm">Vest</button>
-                              <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                              </button>
-                              <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Vest</a></li>
-                                <li><a href="#">Dark archive</a></li>
-                                <li><a href="#">Delete</a></li>
-                              </ul>
-                            </div>
-                        </div>
-                    </div> <!-- row -->
-
+                    </div>
 
                     <div class="row">
                         <div class="col-xs-12">
                             <p class="big-link">
-                                <a href="{{archive.submitted_url}}" target="_blank">{{ archive.submitted_url|truncatechars:130 }}</a>
+                                <a href="{{archive.submitted_url}}" target="_blank">{{ archive.submitted_url|truncatechars:95 }}</a>
                             </p>
                         </div>
                     </div>
-
-
 
                    <div class="row">
                         <div class="col-xs-12">
@@ -71,34 +52,31 @@
                         </div>
                     </div>
 
-
-
                     <div class="row archive-selection-container">
                         <div class="col-xs-12 col-md-6">
                             <div class="archive-btn-container">
-
+                                <p class="archive-type-title">Screen capture</p>
                                 <div class="row">
-                                    <div class="col-lg-8">
+                                    <div class="col-xs-7">
                                         <p>A static image of the webpage as it existed when the archive was created</p>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <a href="#" class="btn btn-sm archive active btn-success" role="button">Screen capture</a>
+                                    <div class="col-xs-5">
+                                        <a href="#" class="btn btn-sm archive active btn-success" role="button">View capture</a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
 
                         <div class="col-xs-12 col-md-6">
                             <div class="archive-btn-container">
-
+                                <p class="archive-type-title">Page capture</p>
                                 <div class="row">
-                                    <div class="col-lg-8">
+                                    <div class="col-xs-7">
                                         <p>A recreation using the HTML as it existed when the archive was created</p>
                                     </div>
-                                    <div class="col-lg-4 ">
-                                        <a href="#" class="btn archive btn-success" role="button">Page capture</a>
+                                    <div class="col-xs-5">
+                                        <a href="#" class="btn archive btn-success" role="button">View capture</a>
                                     </div>
                                 </div>
                             </div>
@@ -128,11 +106,28 @@
                     </div>
 -->
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-7">
                             <p class="creation-details">
-                                created {{ archive.creation_timestamp|local_datetime }} <span class="spacer">·</span>  <!-- if it was vested, print it here --></span> viewed {{ archive.view_count }} time{% if archive.view_count > 1 %}s{% endif %} <span class="spacer">·</span> <a href="{% url 'contact' %}?message=Please have a look at perma.cc{% url 'single_link_header' archive.guid %} " target="_blank">report abuse</a> <span class="spacer">
+                                created {{ archive.creation_timestamp|local_datetime }} <span class="spacer">·</span>  <!-- if it was vested, print it here --></span> viewed {{ archive.view_count }} time{% if archive.view_count > 1 %}s{% endif %} <span class="spacer">·</span> <a href="{% url 'contact' %}?message=Please have a look at perma.cc{% url 'single_link_header' archive.guid %} " target="_blank">report abuse</a>
                             </p>
                         </div>
+
+                        <div class="col-xs-5 pull-right">
+                            <!-- Split button -->
+                            <div class="btn-group pull-right admin-buttons">
+                              <button type="button" class="btn btn-sm">Vest archive</button>
+                              <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Vest archive</a></li>
+                                <li><a href="#">Place in the dark archive</a></li>
+                                <li><a href="#">Delete archive</a></li>
+                              </ul>
+                            </div>
+                        </div>
+
                     </div>
 
                 </section>

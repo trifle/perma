@@ -21,16 +21,16 @@ body {
   	background:#f7f7f7;
     color: #333;
     margin: 0;
-    font-family: 'Roboto Slab', sans-serif;
+    font-family: $primary-font;
 }
 
 .navbar-default {
-	background-image: url('/static/img/bg.png');
+	background-image: url('/static/img/white_wave.png');
 	border-bottom:1px solid #eee;
 }
 
 .tab-border	{
-    border-bottom: solid 5px #ff4100;
+    border-bottom: solid 6px #ff4100;
     padding-bottom: 15px;
 }
 
@@ -38,15 +38,12 @@ body {
     padding: 0;
 }
 
-a {
-	font-weight:400;
-}
-
 p {
     margin-bottom: 20px;
     font-family: $secondary-font;
     font-weight:300;
     color: #555;
+    font-size: 17px;
 }
 
 .logo span {
@@ -59,6 +56,10 @@ p {
     font-family: $primary-font;
     font-size:36px;
     color:#ff4100;
+}
+
+#full-header .controls a {
+    font-weight: 400;
 }
 
 .controls .nav a{
@@ -123,7 +124,7 @@ header #full-header p.big-link  {
 }
 
 header #full-header p.creation-details  {
-    margin: 35px 0 0 0;
+    margin: 15px 0 0 0;
     color: #999;
     font-family: $secondary-font;
     font-size: 15px;
@@ -233,13 +234,25 @@ img.watermark-image {
 }
 
 .archive-btn-container {
-    padding: 5px 20px 5px 10px;
+    padding: 0 0px 10px 7px;
+    /*border-top: solid 14px #ddd;*/
+    margin-bottom: 20px;
     background-color: #f8f8f8;
-    /*border: solid 1px #dfdfdf;*/
+}
+
+.archive-btn-container .archive-type-title {
+    background-color: #aaa;
+    margin: 0 0 0 -7px;;
+    color: #fff;
+    padding: 1px 7px;
+    font-family: $primary-font;
+    font-weight: 300;
+    font-size: 21px;
+    margin-bottom: 10px;
 }
 
 .archive-btn-container a {
-    width: 160px;
+    width: 95%;
     font-size: 16px;
     letter-spacing: .8px;
     color: #fff;
@@ -254,7 +267,7 @@ img.watermark-image {
 
 .archive-btn-container p {
     margin-bottom: 0;
-    font-size: 19px;
+    font-size: 17px;
 }
 
 a.btn.archive {
@@ -298,9 +311,22 @@ a.btn.user-delete:hover, a.btn.user-delete:focus {
   	color:#dd3800;
 }
 
-.admin-buttons{
-    margin-bottom: 10px;
+.admin-buttons {
+    margin: 10px 0;
 }
+
+.admin-buttons .btn {
+    background-color: #eee;
+    border: 1px solid #bbb;
+    color: #444;
+}
+
+
+.admin-buttons .caret {
+    border-top:4px solid #000;
+    margin-top: -1px;
+}
+
 
 /* Buttons end */
 
