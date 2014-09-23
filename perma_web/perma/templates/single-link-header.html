@@ -95,8 +95,6 @@
                         </div>
                         {% endif %}
 
-
-
                         {% if asset.pdf_capture and asset.pdf_capture != 'failed' %}
                         <div class="col-xs-12 col-md-6">
                             <div class="archive-btn-container">
@@ -152,6 +150,7 @@
                         </div>
 
                         <div class="col-xs-5 pull-right">
+                            {% if request.user.is_authenticated %}
                             <!-- Split button -->
                             <div class="btn-group pull-right admin-buttons">
                               <button type="button" class="btn btn-sm">Vest archive</button>
@@ -165,6 +164,7 @@
                                 <li><a href="sdds">Delete archive</a></li>
                               </ul>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -218,7 +218,14 @@
 	<div class="archive-view center">
   		<div class="watermark center">
 
-			{% if not archive.vested %}<div class="negative-margin"><img class="watermark-image" src="{{ STATIC_URL }}img/watermark-text.png"/></div>{% endif %}
+			{% if not archive.vested %}
+                <div class="negative-margin">
+                    <div class="watermark-container">
+                        <p class="title">somthign here. <a href="http://perma.cc" target="_blank">Find out more about the vesting process.</a></p>
+
+                    </div>
+                </div>
+            {% endif %}
 
 			{% if serve_type == 'image'%}
             <iframe src="{% url 'service_image_wrapper' archive.guid %}" sandbox="allow-forms allow-scripts allow-same-origin" id="image_iframe">
