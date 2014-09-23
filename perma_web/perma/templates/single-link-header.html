@@ -32,7 +32,7 @@
                 <section class="url-row">
                     <div class="row">
                         <div class="col-xs-12">
-                            <p style="color: #777; font-family: helvetica; margin-bottom:5px; font-size: 15px;">Below the orange bar is an archive of</p>
+                            <p class="archive-note">Below the orange bar is an archive of</p>
                         </div>
                     </div>
 
@@ -46,7 +46,7 @@
 
                    <div class="row">
                         <div class="col-xs-12">
-                            <p class="archive-note">
+                            <p class="archive-note archive-count-note">
                                 We have {{ asset|count_archives }} for this archive
                             </p>
                         </div>
@@ -80,7 +80,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div><!-- row -->
+                    </div>
 <!--
                     <div class="row">
                         <div class="col-xs-12">
@@ -106,7 +106,7 @@
 -->
                     <div class="row">
                         <div class="col-xs-7">
-                            <p class="creation-details">
+                            <p class="archive-note creation-details">
                                 created {{ archive.creation_timestamp|local_datetime }} <span class="spacer">·</span>  <!-- if it was vested, print it here --></span> viewed {{ archive.view_count }} time{% if archive.view_count > 1 %}s{% endif %} <span class="spacer">·</span> <a href="{% url 'contact' %}?message=Please have a look at perma.cc{% url 'single_link_header' archive.guid %} " target="_blank">report abuse</a>
                             </p>
                         </div>

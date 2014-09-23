@@ -62,7 +62,7 @@ p {
     font-weight: 400;
 }
 
-.controls .nav a{
+.controls .nav a {
     color: #09f;
     font-size: 20px;
     margin-top: 15px;
@@ -79,18 +79,18 @@ p {
 
 header #compact-header .expand-button   {
     font-size: 20px;
-    margin-top: 4px;
+    margin-top: 3px;
     cursor: pointer; cursor: hand;
     color: #666;
 }
 
 header #compact-header .url-compact   {
-    margin-top: 3px;
+    margin-top: 2px;
     font-size: 18px;
 }
 
 header #compact-header .infinity-logo   {
-    margin-top: 4px;
+    margin-top: 3px;
 }
 
 /* Compact header end */
@@ -98,7 +98,7 @@ header #compact-header .infinity-logo   {
 /* Full header start */
 
 header #full-header .controls {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .url-row {
@@ -107,11 +107,6 @@ header #full-header .controls {
     -moz-box-shadow:    2px 0px 4px 0px #c6ccd1;
     -webkit-box-shadow: 2px 0px 4px 0px #c6ccd1;
     box-shadow:         0px 0px 4px 0px #c6ccd1;
-}
-
-header #full-header p.helper-info  {
-    color: #444;
-    font-family: $secondary-font;
 }
 
 header #full-header p.big-link  {
@@ -123,25 +118,26 @@ header #full-header p.big-link  {
     padding: 0 5px;
 }
 
-header #full-header p.creation-details  {
-    margin: 15px 0 0 0;
-    color: #999;
-    font-family: $secondary-font;
-    font-size: 15px;
-}
-
 header #full-header .spacer {
     margin-left: 4px;
     margin-right: 4px;
 }
 
 header #full-header p.archive-note {
-    margin-top: 40px;
-    margin-bottom: 7px;
-    color: #777;
+    color: #888;
     font-family: $secondary-font;
     font-size: 15px;
+    margin-bottom: 0;
 }
+
+.archive-count-note {
+    margin-top: 35px;
+}
+
+.creation-details {
+    margin-top: 25px;
+}
+
 
 header #full-header a {
     font-weight: 300;
@@ -234,10 +230,12 @@ img.watermark-image {
 }
 
 .archive-btn-container {
-    margin-bottom: 20px;
-    margin-top: 2px;
+    margin-bottom: 15px;
+    margin-top: 5px;
     padding-top: 7px;
-    border-top: 7px solid #ccc;
+    padding-bottom: 7px;
+    border-top: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
 }
 
 .archive-btn-container .archive-type-title {
@@ -252,9 +250,9 @@ img.watermark-image {
     width: 100%;
     font-size: 16px;
     letter-spacing: .8px;
-    color: #fff;
-    background-color: $secondary-color;
-    border: 3px solid $secondary-color;
+    color: $secondary_color;
+    background-color: #fff;
+    border: 2px solid #888;
 }
 
 .archive-btn-container a:hover {
@@ -271,13 +269,10 @@ a.btn.archive {
     border-radius: 3px;
     margin-top: 5px;
     letter-spacing: .8px;
-}
-
-a.btn.active {
     background-color: #fff;
-    color: #555;
+    color: $secondary_color;
     box-shadow: none;
-    border: 2px solid #999;
+    border: 2px solid #888;
 }
 
 a.btn.vest, a.btn.dashboard, a.btn.user-delete, input.btn.vest {
@@ -312,16 +307,18 @@ a.btn.user-delete:hover, a.btn.user-delete:focus {
 }
 
 .admin-buttons .btn {
-    background-color: #eee;
+    background-color: #fff;
     border: 1px solid #bbb;
-    color: #444;
+    color: $secondary-color;
+    border-radius: 3px;
+    font-weight: 300;
+    margin-top: 20px;
 }
 
 .admin-buttons .caret {
-    border-top:4px solid #000;
+    border-top:4px solid $secondary_color;
     margin-top: -1px;
 }
-
 
 /* Buttons end */
 
