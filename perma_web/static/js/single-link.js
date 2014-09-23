@@ -17,7 +17,7 @@ var check_status = function() {
 
         if ($('#image_cap_container_loading').is(":visible") && data.image_capture != 'pending') {
             $('#image_cap_container_loading').hide();
-            $('#image_cap_container_complete').show();
+            $('#image_cap_container_complete').css({'display': 'block'});
 
             // A kludge to reload iframe
             $('iframe').attr('src', $('iframe').attr('src'));
@@ -25,7 +25,7 @@ var check_status = function() {
 
         if ($('#warc_cap_container_loading').is(":visible") && data.source_capture != 'pending') {
             $('#warc_cap_container_loading').hide();
-            $('#warc_cap_container_complete').show();
+            $('#warc_cap_container_complete').css({'display': 'block'});
 
             // A kludge to reload iframe
             $('iframe').attr('src', $('iframe').attr('src'));
@@ -33,7 +33,7 @@ var check_status = function() {
 
         if ($('#pdf_cap_container_loading').is(":visible") && data.pdf_capture != 'pending') {
             $('#pdf_cap_container_loading').hide();
-            $('#pdf_cap_container_complete').show();
+            $('#pdf_cap_container_complete').css({'display': 'block'});
 
             // A kludge to reload iframe
             $('iframe').attr('src', $('iframe').attr('src'));

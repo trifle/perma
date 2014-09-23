@@ -53,6 +53,8 @@
                     </div>
 
                     <div class="row archive-selection-container">
+
+                        {% if asset.image_capture and asset.image_capture != 'failed' %}
                         <div class="col-xs-12 col-md-6">
                             <div class="archive-btn-container">
 
@@ -61,13 +63,19 @@
                                         <p>A static image of the webpage as it existed when the archive was created</p>
                                     </div>
                                     <div class="col-xs-5">
-                                        <a href="#" class="btn btn-sm archive active btn-success" role="button">Screen capture</a>
+                                        {% if asset.image_capture == 'pending' %}
+                                            <a id="image_cap_container_loading" href="{% url 'single_link_header' archive.guid %}" class="btn btn-sm archive" {% if serve_type == 'image' %}disabled="disabled"{% endif %} role="button"><img src="{{ STATIC_URL }}img/spinner.gif"> Screen capture</a>
+                                            <a id="image_cap_container_complete" href="{% url 'single_link_header' archive.guid %}" class="btn btn-sm archive" {% if serve_type == 'image' %}disabled="disabled"{% endif %} role="button">Screen capture</a>
+                                        {% else %}
+                                            <a href="{% url 'single_link_header' archive.guid %}" class="btn btn-sm archive" {% if serve_type == 'image' %}disabled="disabled"{% endif %} role="button">Screen capture</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 
-
+                        {% if asset.warc_capture and asset.warc_capture != 'failed' %}
                         <div class="col-xs-12 col-md-6">
                             <div class="archive-btn-container">
                                 <div class="row">
@@ -75,11 +83,43 @@
                                         <p>A recreation using the HTML as it existed when the archive was created</p>
                                     </div>
                                     <div class="col-xs-5">
-                                        <a href="#" class="btn archive btn-success" role="button">Page capture</a>
+                                        {% if asset.warc_capture == 'pending' %}
+                                            <a id="warc_cap_container_loading" href="{% url 'single_link_header' archive.guid %}?type=source" class="btn btn-sm archive" disabled="disabled" role="button"><img src="{{ STATIC_URL }}img/spinner.gif"> Page capture</a>
+                                            <a id="warc_cap_container_complete" href="{% url 'single_link_header' archive.guid %}?type=source" class="btn btn-sm archive" {% if serve_type == 'source' %}disabled="disabled"{% endif %} role="button">Page capture</a>
+                                        {% else %}
+                                            <a href="{% url 'single_link_header' archive.guid %}?type=source" class="btn btn-sm archive" {% if serve_type == 'source' %}disabled="disabled"{% endif %} role="button">Page capture</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+
+
+
+                        {% if asset.pdf_capture and asset.pdf_capture != 'failed' %}
+                        <div class="col-xs-12 col-md-6">
+                            <div class="archive-btn-container">
+                                <div class="row">
+                                    <div class="col-xs-7">
+                                        <p>The PDF document that was captured when the archive was created</p>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        {% if asset.pdf_capture == 'pending' %}
+                                            <a id="pdf_cap_container_loading" href="{% url 'single_link_header' archive.guid %}?type=pdf" class="btn btn-sm archive" disabled="disabled" role="button"><img src="{{ STATIC_URL }}img/spinner.gif"> PDF capture</a>
+                                            <a id="pdf_cap_container_complete" href="{% url 'single_link_header' archive.guid %}?type=pdf" class="btn btn-sm archive" {% if serve_type == 'pdf' %}disabled="disabled"{% endif %} role="button">PDF capture</a>
+                                        {% else %}
+                                            <a href="{% url 'single_link_header' archive.guid %}?type=pdf" class="btn btn-sm archive" {% if serve_type == 'pdf' %}disabled="disabled"{% endif %} role="button">PDF capture</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+
+
                     </div>
 <!--
                     <div class="row">
@@ -120,102 +160,15 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                               </button>
                               <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Vest archive</a></li>
-                                <li><a href="#">Place in the dark archive</a></li>
-                                <li><a href="#">Delete archive</a></li>
+                                <li><a href="sdf">Vest archive</a></li>
+                                <li><a href="svddsv">Place in the dark archive</a></li>
+                                <li><a href="sdds">Delete archive</a></li>
                               </ul>
                             </div>
                         </div>
-
                     </div>
 
                 </section>
-
-
-
-
-<!--
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-9">
-                        <p class="archive-note">
-                            We have {{ asset|count_archives }} for this archive
-                        </p>
-                    </div>
-                </div>
-
-
-                <div class="row">
-
-                    {% if asset.image_capture and asset.image_capture != 'failed' %}
-                    <div class="col-sm-6 image-container">
-                        {% if serve_type != 'image' %}<a href="{% url 'single_link_header' archive.guid %}">{% endif %}
-                        <div class="{% if serve_type == 'image' %}selected-archive-container{% endif %} archive-container" style="overflow: hidden; ">
-                            <div style="float: left; min-width: 55px;">
-                                <img src="{{ STATIC_URL }}img/static_capture_icon.png" class="" style="margin-top: 2px;" height=76px width=53px>
-                            </div>
-                            <div style="float: left; width: 77%; margin-left: 12px;">
-                                {% if asset.image_capture == 'pending' %}
-                                    <p class="archive-heading" id="image_cap_container_loading">Screen capture <img style="margin-top: 13px;" class="pull-right" src="{{ STATIC_URL }}img/dots.gif"></p>
-                                    <p class="archive-heading" id="image_cap_container_complete">Screen capture</p>
-                                {% else %}
-                                    <p class="archive-heading">Screen capture</p>
-                                {% endif %}
-                                <p>A static image of the webpage as it existed when the archive was created</p>
-                            </div>
-                        </div>
-                        {% if serve_type != 'image' %}</a>{% endif %}
-                    </div>
-                    {% endif %}
-
-                    {% if asset.warc_capture and asset.warc_capture != 'failed' %}
-                    <div class="col-sm-6 source-container">
-                        {% if serve_type != 'source' %}<a href="{% url 'single_link_header' archive.guid %}?type=source">{% endif %}
-                            <div class="{% if serve_type == 'source' %}selected-archive-container{% endif %} archive-container" style="overflow: hidden; ">
-                                <div style="float: left; min-width: 55px;">
-                                        <img src="{{ STATIC_URL }}img/lsource_capture_icon.png" style="margin-top: 2px;" height=76px width=53px>
-                                </div>
-                                <div style="float: left; width: 77%; margin-left: 12px;">
-                                    {% if asset.warc_capture == 'pending' %}
-                                        <p class="archive-heading" id="warc_cap_container_loading">Page capture <img style="margin-top: 13px;" class="pull-right" src="{{ STATIC_URL }}img/dots.gif"></p>
-                                        <p class="archive-heading" id="warc_cap_container_complete">Page capture</p>
-                                    {% else %}
-                                        <p class="archive-heading">Page capture</p>
-                                    {% endif %}
-                                    <p>A recreation of the webpage using the HTML as it existed when the archive was created</p>
-                                </div>
-                            </div>
-                        {% if serve_type != 'source' %}</a>{% endif %}
-                    </div>
-                    {% endif %}
-
-                    {% if asset.pdf_capture and asset.pdf_capture != 'failed' %}
-                    <div class="col-sm-6 pdf-container">
-                        {% if serve_type != 'pdf' %}<a href="{% url 'single_link_header' archive.guid %}?type=pdf_capture">{% endif %}
-                            <div class="{% if serve_type == 'pdf' %}selected-archive-container{% endif %} archive-container" style="overflow: hidden; ">
-                                <div style="float: left; min-width: 55px;">
-                                        <img src="{{ STATIC_URL }}img/pdf_capture_icon.png" style="margin-top: 2px;" height=76px width=53px>
-                                </div>
-                                <div style="float: left; width: 77%; margin-left: 12px;">
-                                    {% if asset.pdf_capture == 'pending' %}
-                                        <p class="archive-heading" id="pdf_cap_container_loading">PDF capture <img style="margin-top: 13px;" class="pull-right" src="{{ STATIC_URL }}img/dots.gif"></p>
-                                        <p class="archive-heading" id="pdf_cap_container_complete">PDF capture</p>
-                                    {% else %}
-                                        <p class="archive-heading">PDF capture</p>
-                                    {% endif %}
-                                    <p>The PDF document that was captured when the archive was created </p>
-                                </div>
-                            </div>
-                        {% if serve_type != 'pdf' %}</a>{% endif %}
-                    </div>
-                    {% endif %}
-
-                </div>
-
-
-
--->
-
             </div> <!-- /full-header -->
 
             <div id="compact-header">
