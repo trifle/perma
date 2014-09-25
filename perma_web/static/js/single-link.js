@@ -119,7 +119,7 @@ $(document).ready(function() {
     // We need to redraw the header to the same height
     // if the header is expanded
 
-    original_header_height = $('#full-header').height();
+    original_header_height = $('header').height();
 
 
     // We need to set an overlay on top of our iframe
@@ -134,7 +134,7 @@ $(document).ready(function() {
         expand_header();
     });
 
-    $('.navbar').on('DOMMouseScroll mousewheel', function () {
+    $('.navbar, .watermark-container').on('DOMMouseScroll mousewheel', function () {
         collapse_header();
     });
 

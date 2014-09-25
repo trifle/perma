@@ -39,7 +39,7 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <p class="big-link">
-                                <a href="{{archive.submitted_url}}" target="_blank">{{ archive.submitted_url|truncatechars:95 }}</a>
+                                <a href="{{archive.submitted_url}}" target="_blank">{{ archive.submitted_url|truncatechars:70 }}</a>
                             </p>
                         </div>
                     </div>
@@ -220,9 +220,21 @@
 
 			{% if not archive.vested %}
                 <div class="negative-margin">
-                    <div class="watermark-container">
-                        <p class="title">somthign here. <a href="http://perma.cc" target="_blank">Find out more about the vesting process.</a></p>
-
+                    <div class="watermark-container" onClick="style.pointerEvents='none'">
+                        <div class="container">
+                            <section>
+                                <div class="row">
+                                    <div class="col-xs-2 ">
+                                        <img src="{{ STATIC_URL }}img/sw.svg" class="img-responsive pull-right">
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <div class="pull-left watermark-text">
+                                            <p class="title">This archive is temporary and needs to be <a href="http://perma.cc" target="_blank">vested</a>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
             {% endif %}

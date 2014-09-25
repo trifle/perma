@@ -111,7 +111,7 @@ header #full-header .controls {
 
 header #full-header p.big-link  {
     word-wrap: break-word;
-    font-size: 37px;
+    font-size: 32px;
     font-family: $primary-font;
     display: inline;
     background: #fff849;
@@ -147,7 +147,7 @@ header #full-header a {
    background:transparent;
    position:relative;
    width:9000px;
-   z-index:88888;
+   z-index:100;
 }
 
 ul {
@@ -195,28 +195,45 @@ iframe {
 /* Watermark start */
 
 .negative-margin {
-	margin-top:-20px;
+	/*margin-top:-20px;*/
+	margin-top:20px;
 }
 
 .watermark-container {
     position:relative;
 	border:none;
-	border-radius:3px;
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
-	z-index:2;
+	z-index:1000;
     margin:0 auto -20%;
 	opacity:.85;
-	width:70%;
-	pointer-events:none;
-	height: 200px;
-	background-color: #88cfff;
+}
+
+.watermark-container section {
+    background-color: #09f;
+    padding: 10px 0;
+}
+
+.watermark-container img {
+    vertical-align:middle;
+    height: 90%;
 }
 
 .watermark-container .title {
     font-size: 40px;
     color: #fff;
+    margin-top: 20px;
+}
+
+.watermark-container a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.watermark-text {
+    opacity: 1;
+    text-align: left;
 }
 
 .watermark {
@@ -233,7 +250,6 @@ img.watermark-image {
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
-	z-index:2;
     margin:0 auto -20%;
 	opacity:.85;
 	width:70%;
@@ -259,7 +275,7 @@ img.watermark-image {
 
 .archive-btn-container .archive-type-title {
 
-    color: $primary_color;
+    color: $primary-color;
     font-family: $secondary-font;
     font-size: 21px;
     margin-bottom: 10px;
@@ -269,7 +285,7 @@ img.watermark-image {
     width: 100%;
     font-size: 16px;
     letter-spacing: .8px;
-    color: $secondary_color;
+    color: $secondary-color;
     background-color: #fff;
     border: 2px solid #888;
 }
@@ -290,7 +306,7 @@ a.btn.archive {
     margin-top: 5px;
     letter-spacing: .8px;
     background-color: #fff;
-    color: $secondary_color;
+    color: $secondary-color;
     box-shadow: none;
     border: 2px solid #888;
 }
@@ -341,7 +357,7 @@ a.btn.user-delete:hover, a.btn.user-delete:focus {
 }
 
 .admin-buttons .caret {
-    border-top:4px solid $secondary_color;
+    border-top:4px solid $secondary-color;
     margin-top: -1px;
 }
 
